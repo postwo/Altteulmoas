@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/${data}?serverTimezone=Asia/Seoul
+    username: ${name}
+    password: ${pw}
+
+  #  mvc: #뷰리졸버 설정 이거는 mustach라이브러리가 알아서 설정해줌
+  #    view:
+  #      prefix: /templates/
+  #      suffix: .mustache
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop #create update none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
