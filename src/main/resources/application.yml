@@ -1,5 +1,5 @@
 server:
-  port: 4000
+  port: 8000
   servlet:
     context-path: /
     encoding:
@@ -8,14 +8,33 @@ server:
       force: true
 
 spring:
+
+  show-sql: true
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3307/${data}?serverTimezone=Asia/Seoul
     username: ${name}
     password: ${pw}
 
-  jpa:
-    hibernate:
-      ddl-auto: create #create update none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  sql.init.mode: always
+
+  jwt:
+    secret-key: ${key}
+
+
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG               # SQL 쿼리 로그를 출력
+    org.hibernate.type.descriptor.sql.BasicTypeDescriptor: TRACE # 바인딩된 파라미터의 로그를 출력
