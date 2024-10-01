@@ -6,12 +6,14 @@ import com.example.altteulmoa.dto.request.auth.SignUpRequestDto;
 public class UserConverter {
 
     //회원가입
+    // 회원가입
     public static UserEntity toEntity(SignUpRequestDto dto) {
-        return new UserEntity(
-                dto.getEmail(),
-                dto.getPassword(),
-                dto.getNickname(),
-                dto.getUserStatus()
-        );
+        return UserEntity.builder()
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .nickname(dto.getNickname())
+                .userStatus(dto.getUserStatus())
+                .telNumber(dto.getTelNumber()) // telNumber 추가
+                .build();
     }
 }
