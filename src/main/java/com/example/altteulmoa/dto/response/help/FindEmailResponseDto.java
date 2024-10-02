@@ -1,4 +1,4 @@
-package com.example.altteulmoa.dto.response.find;
+package com.example.altteulmoa.dto.response.help;
 
 import com.example.altteulmoa.common.error.ErrorCode;
 import com.example.altteulmoa.dto.response.ResponseDto;

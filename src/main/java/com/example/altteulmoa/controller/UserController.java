@@ -2,9 +2,7 @@ package com.example.altteulmoa.controller;
 
 
 import com.example.altteulmoa.dto.request.auth.SignUpRequestDto;
-import com.example.altteulmoa.dto.request.find.FindEmailRequestDto;
 import com.example.altteulmoa.dto.response.auth.SignUpResponseDto;
-import com.example.altteulmoa.dto.response.find.FindEmailResponseDto;
 import com.example.altteulmoa.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +28,4 @@ public class UserController {
         return response;
     }
 
-
-    //이메일 찾기
-    @PostMapping("/find-email")
-    public ResponseEntity<? super FindEmailResponseDto> findEmail(@RequestBody @Valid FindEmailRequestDto requestBody){
-      ResponseEntity<? super FindEmailResponseDto> response = userService.findEM(requestBody);
-      return response;
-    }
 }

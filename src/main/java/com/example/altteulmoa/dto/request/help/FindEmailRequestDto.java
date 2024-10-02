@@ -1,4 +1,4 @@
-package com.example.altteulmoa.dto.request.find;
+package com.example.altteulmoa.dto.request.help;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
