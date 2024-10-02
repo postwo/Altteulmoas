@@ -13,6 +13,13 @@ public class SignUpResponseDto extends ResponseDto {
         super(httpStatusCode, errorCode, description);
     }
 
+    //성공
+    public static ResponseEntity<ResponseDto> success(){
+        ErrorCode errorCode = ErrorCode.SUCCESS;
+        ResponseDto responseBody = new ResponseDto(errorCode.getHttpStatusCode(),errorCode.getErrorCode(), errorCode.getDescription());
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+    }
+
     // 공통 오류 응답
     private static ResponseEntity<SignUpResponseDto> createErrorResponse(ErrorCode errorCode) {
         SignUpResponseDto result = new SignUpResponseDto(
