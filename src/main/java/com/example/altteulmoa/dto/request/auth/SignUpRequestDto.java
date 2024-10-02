@@ -1,7 +1,9 @@
 package com.example.altteulmoa.dto.request.auth;
 
 import com.example.altteulmoa.domain.entity.user.enums.UserStatus;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
