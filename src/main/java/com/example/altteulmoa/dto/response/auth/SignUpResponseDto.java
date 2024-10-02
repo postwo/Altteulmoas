@@ -16,7 +16,7 @@ public class SignUpResponseDto extends ResponseDto {
     //성공
     public static ResponseEntity<SignUpResponseDto> success(){
         ErrorCode errorCode = ErrorCode.SUCCESS;
-        ResponseDto responseBody = new ResponseDto(errorCode.getHttpStatusCode(),errorCode.getErrorCode(), errorCode.getDescription());
+        SignUpResponseDto responseBody = new SignUpResponseDto(errorCode.getHttpStatusCode(),errorCode.getErrorCode(), errorCode.getDescription());
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
