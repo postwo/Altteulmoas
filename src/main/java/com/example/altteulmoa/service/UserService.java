@@ -3,14 +3,19 @@ package com.example.altteulmoa.service;
 import com.example.altteulmoa.converter.user.UserConverter;
 import com.example.altteulmoa.domain.entity.user.UserEntity;
 import com.example.altteulmoa.domain.entity.user.enums.UserStatus;
+import com.example.altteulmoa.dto.request.auth.SignInRequestDto;
 import com.example.altteulmoa.dto.request.auth.SignUpRequestDto;
+import com.example.altteulmoa.dto.response.auth.SignInResponseDto;
 import com.example.altteulmoa.dto.response.auth.SignUpResponseDto;
+import com.example.altteulmoa.provider.JwtProvider;
 import com.example.altteulmoa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final JwtProvider jwtProvider;
 
     //회원가입
     public ResponseEntity<? super SignUpResponseDto> register(SignUpRequestDto dto) {
@@ -50,5 +57,30 @@ public class UserService {
       return SignUpResponseDto.success();
     }
 
+
+    //로그인
+    public ResponseEntity<? super SignInResponseDto> login(SignInRequestDto dto){
+
+        String token = null;
+
+        try{
+            String email = dto.getEmail();
+            Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+            if (userEntity.isEmpty()) return SignInResponseDto.signFail();
+
+            String password = dto.getPassword();
+            String encodePassword = userEntity.get().getPassword();
+            boolean isMatched = passwordEncoder.matches(password,encodePassword);
+            if (!isMatched) return SignInResponseDto.signFail();
+
+            token = jwtProvider.create(email);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return SignInResponseDto.databaseError();
+        }
+
+        return SignInResponseDto.success(token);
+    }
 
 }

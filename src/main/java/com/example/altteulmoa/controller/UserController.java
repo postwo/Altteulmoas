@@ -1,7 +1,9 @@
 package com.example.altteulmoa.controller;
 
 
+import com.example.altteulmoa.dto.request.auth.SignInRequestDto;
 import com.example.altteulmoa.dto.request.auth.SignUpRequestDto;
+import com.example.altteulmoa.dto.response.auth.SignInResponseDto;
 import com.example.altteulmoa.dto.response.auth.SignUpResponseDto;
 import com.example.altteulmoa.service.UserService;
 import jakarta.validation.Valid;
@@ -25,6 +27,13 @@ public class UserController {
     @PostMapping("/sign-up")
     public ResponseEntity<? super SignUpResponseDto> signUp(@RequestBody @Valid SignUpRequestDto requestBody){
         ResponseEntity<? super SignUpResponseDto> response = userService.register(requestBody);
+        return response;
+    }
+
+    //로그인
+    @PostMapping("/sign-in")
+    public ResponseEntity<? super SignInResponseDto> signIn(@RequestBody @Valid SignInRequestDto requestBody){
+        ResponseEntity<? super SignInResponseDto> response = userService.login(requestBody);
         return response;
     }
 
