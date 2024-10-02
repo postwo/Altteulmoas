@@ -43,6 +43,10 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name:'jjwt-jackson',version: '0.11.2'
 
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	//swagger ui == 스프링 3.0부터는 이 의존성을 주입해야 동작을 한다
+	//https://colabear754.tistory.com/130 여기 블로그 참고 하면된다 == spring boot 버전마다 의존성 주입방법이 다르다
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
 }
 
 tasks.named('test') {
