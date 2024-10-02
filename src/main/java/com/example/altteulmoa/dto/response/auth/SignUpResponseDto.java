@@ -21,8 +21,8 @@ public class SignUpResponseDto extends ResponseDto {
     }
 
     // 공통 오류 응답
-    private static ResponseEntity<SignUpResponseDto> createErrorResponse(ErrorCode errorCode) {
-        SignUpResponseDto result = new SignUpResponseDto(
+    private static ResponseEntity<ResponseDto> createErrorResponse(ErrorCode errorCode) {
+        ResponseDto result = new ResponseDto(
                 errorCode.getHttpStatusCode(),
                 errorCode.getErrorCode(),
                 errorCode.getDescription()
@@ -30,11 +30,11 @@ public class SignUpResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
-    public static ResponseEntity<SignUpResponseDto> duplicateEmail(){
+    public static ResponseEntity<ResponseDto> duplicateEmail(){
         return createErrorResponse(ErrorCode.DUPLICATE_EMAIL);
     }
 
-    public static ResponseEntity<SignUpResponseDto> duplicateNickname(){
+    public static ResponseEntity<ResponseDto> duplicateNickname(){
         return createErrorResponse(ErrorCode.DUPLICATE_NICKNAME);
     }
 

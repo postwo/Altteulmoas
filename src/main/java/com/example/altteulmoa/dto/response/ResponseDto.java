@@ -15,8 +15,6 @@ public class ResponseDto {
     private Integer errorCode;
     private String description;
 
-
-
     // 데이터베이스 에러
     public static ResponseEntity<ResponseDto> databaseError(){
         ErrorCode errorCode = ErrorCode.DATABASE_ERROR;
