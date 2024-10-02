@@ -15,12 +15,7 @@ public class ResponseDto {
     private Integer errorCode;
     private String description;
 
-    //성공
-    public static ResponseEntity<ResponseDto> success(){
-        ErrorCode errorCode = ErrorCode.SUCCESS;
-        ResponseDto responseBody = new ResponseDto(errorCode.getHttpStatusCode(),errorCode.getErrorCode(), errorCode.getDescription());
-        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
-    }
+
 
     // 데이터베이스 에러
     public static ResponseEntity<ResponseDto> databaseError(){
