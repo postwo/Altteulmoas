@@ -18,7 +18,7 @@ public class JwtProvider {
     @Value("${spring.jwt.secret-key}")
     private String secretKey;
 
-    public String create(String email) {
+    public String create(String email, String role) {
 
             Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS)); //만료시간
 
@@ -28,6 +28,7 @@ public class JwtProvider {
             String jwt = Jwts.builder()
                     .signWith(key, SignatureAlgorithm.HS256)
                     .setSubject(email) //JWT의 subject(주제) 필드에 사용자 email을 설정
+                    .claim("role", role)
                     .setIssuedAt(new Date()).setExpiration(expiredDate)  //JWT가 발행된 시간을 현재 시간으로 설정
                     .compact(); //JWT 문자열을 생성
             return jwt;
@@ -53,6 +54,11 @@ public class JwtProvider {
 
             return subject;
         }
+
+    // secretKey를 반환하는 메서드
+    public String getSecretKey() {
+        return secretKey;
+    }
 
     }
 

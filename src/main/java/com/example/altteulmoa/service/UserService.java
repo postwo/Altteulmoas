@@ -3,10 +3,13 @@ package com.example.altteulmoa.service;
 import com.example.altteulmoa.converter.user.UserConverter;
 import com.example.altteulmoa.domain.entity.user.UserEntity;
 import com.example.altteulmoa.domain.entity.user.enums.UserStatus;
+import com.example.altteulmoa.dto.request.address.AddressRequestDto;
 import com.example.altteulmoa.dto.request.auth.SignInRequestDto;
 import com.example.altteulmoa.dto.request.auth.SignUpRequestDto;
+import com.example.altteulmoa.dto.response.address.AddressResponseDto;
 import com.example.altteulmoa.dto.response.auth.SignInResponseDto;
 import com.example.altteulmoa.dto.response.auth.SignUpResponseDto;
+import com.example.altteulmoa.filter.UserDetailsImpl;
 import com.example.altteulmoa.provider.JwtProvider;
 import com.example.altteulmoa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -73,7 +76,10 @@ public class UserService {
             boolean isMatched = passwordEncoder.matches(password,encodePassword);
             if (!isMatched) return SignInResponseDto.signFail();
 
-            token = jwtProvider.create(email);
+            // 사용자 역할 가져오기
+            String role = "ROLE_" + userEntity.get().getUserStatus().name();
+
+            token = jwtProvider.create(email,role);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -81,6 +87,29 @@ public class UserService {
         }
 
         return SignInResponseDto.success(token);
+    }
+
+    //주소 저장
+    public ResponseEntity<? super AddressResponseDto> address(UserDetailsImpl userDetails, AddressRequestDto dto) {
+        try {
+            String email = userDetails.getUsername();
+            Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
+
+            if (optionalUserEntity.isEmpty()) return AddressResponseDto.notUser();
+
+
+            // Optional에서 UserEntity 가져오기
+            UserEntity userEntity = optionalUserEntity.get();
+
+            userEntity.setAddress(dto.getAddress());
+
+            userRepository.save(userEntity);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return SignInResponseDto.databaseError();
+        }
+        return AddressResponseDto.success(dto.getAddress());
     }
 
 }

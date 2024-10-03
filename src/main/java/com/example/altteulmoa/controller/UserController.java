@@ -1,15 +1,19 @@
 package com.example.altteulmoa.controller;
 
 
+import com.example.altteulmoa.dto.request.address.AddressRequestDto;
 import com.example.altteulmoa.dto.request.auth.SignInRequestDto;
 import com.example.altteulmoa.dto.request.auth.SignUpRequestDto;
+import com.example.altteulmoa.dto.response.address.AddressResponseDto;
 import com.example.altteulmoa.dto.response.auth.SignInResponseDto;
 import com.example.altteulmoa.dto.response.auth.SignUpResponseDto;
+import com.example.altteulmoa.filter.UserDetailsImpl;
 import com.example.altteulmoa.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +40,14 @@ public class UserController {
         ResponseEntity<? super SignInResponseDto> response = userService.login(requestBody);
         return response;
     }
+
+    //사용자 주소 저장
+    @PostMapping("/address")
+    public ResponseEntity<? super AddressResponseDto> address(@AuthenticationPrincipal UserDetailsImpl  userDetails, @RequestBody @Valid AddressRequestDto requestBody) {
+       log.info(userDetails.getUsername());
+        ResponseEntity<? super AddressResponseDto> response = userService.address(userDetails,requestBody);
+        return response;
+    }
+
 
 }
