@@ -9,7 +9,6 @@ import com.example.altteulmoa.dto.request.auth.SignUpRequestDto;
 import com.example.altteulmoa.dto.response.address.AddressResponseDto;
 import com.example.altteulmoa.dto.response.auth.SignInResponseDto;
 import com.example.altteulmoa.dto.response.auth.SignUpResponseDto;
-import com.example.altteulmoa.filter.UserDetailsImpl;
 import com.example.altteulmoa.provider.JwtProvider;
 import com.example.altteulmoa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -77,9 +76,9 @@ public class UserService {
             if (!isMatched) return SignInResponseDto.signFail();
 
             // 사용자 역할 가져오기
-            String role = "ROLE_" + userEntity.get().getUserStatus().name();
+//            String role = "ROLE_" + userEntity.get().getUserStatus().name();
 
-            token = jwtProvider.create(email,role);
+            token = jwtProvider.create(email);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -90,9 +89,8 @@ public class UserService {
     }
 
     //주소 저장
-    public ResponseEntity<? super AddressResponseDto> address(UserDetailsImpl userDetails, AddressRequestDto dto) {
+    public ResponseEntity<? super AddressResponseDto> address(String email, AddressRequestDto dto) {
         try {
-            String email = userDetails.getUsername();
             Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
 
             if (optionalUserEntity.isEmpty()) return AddressResponseDto.notUser();
