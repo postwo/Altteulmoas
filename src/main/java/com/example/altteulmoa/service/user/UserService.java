@@ -16,12 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -61,6 +63,7 @@ public class UserService {
 
 
     //로그인
+    @Transactional(readOnly = true)
     public ResponseEntity<? super SignInResponseDto> login(SignInRequestDto dto){
 
         String token = null;
@@ -74,9 +77,6 @@ public class UserService {
             String encodePassword = userEntity.get().getPassword();
             boolean isMatched = passwordEncoder.matches(password,encodePassword);
             if (!isMatched) return SignInResponseDto.signFail();
-
-            // 사용자 역할 가져오기
-//            String role = "ROLE_" + userEntity.get().getUserStatus().name();
 
             token = jwtProvider.create(email);
 
@@ -95,9 +95,13 @@ public class UserService {
 
             if (optionalUserEntity.isEmpty()) return AddressResponseDto.notUser();
 
-
             // Optional에서 UserEntity 가져오기
             UserEntity userEntity = optionalUserEntity.get();
+
+            // 사용자 주소가 이미 저장되어 있으면 저장 못하게 막는다.
+            if (userEntity.getAddress() != null && userEntity.getAddress().equals(dto.getAddress())) {
+                return AddressResponseDto.invalidAddress();
+            }
 
             userEntity.setAddress(dto.getAddress());
 
