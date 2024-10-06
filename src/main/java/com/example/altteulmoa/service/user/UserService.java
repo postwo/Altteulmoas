@@ -1,4 +1,4 @@
-package com.example.altteulmoa.service;
+package com.example.altteulmoa.service.user;
 
 import com.example.altteulmoa.converter.user.UserConverter;
 import com.example.altteulmoa.domain.entity.user.UserEntity;
@@ -78,7 +78,11 @@ public class UserService {
             boolean isMatched = passwordEncoder.matches(password,encodePassword);
             if (!isMatched) return SignInResponseDto.signFail();
 
+
+
+            //기존 토큰 생성
             token = jwtProvider.create(email);
+
 
         }catch (Exception e){
             e.printStackTrace();
@@ -93,7 +97,7 @@ public class UserService {
         try {
             Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
 
-            if (optionalUserEntity.isEmpty()) return AddressResponseDto.notUser();
+            if (optionalUserEntity.isEmpty()) return AddressResponseDto.existedUser();
 
             // Optional에서 UserEntity 가져오기
             UserEntity userEntity = optionalUserEntity.get();
