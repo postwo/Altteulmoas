@@ -2,6 +2,7 @@ package com.example.altteulmoa.dto.response;
 
 
 import com.example.altteulmoa.common.error.ErrorCode;
+import com.example.altteulmoa.dto.response.help.FindEmailResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -29,5 +30,11 @@ public class ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 
+    //사용자 정보를 찾을수 없습니다
+    public static ResponseEntity<ResponseDto> existedUser(){
+        ErrorCode errorCode = ErrorCode.NOT_EXISTED_USER;
+        FindEmailResponseDto result = new FindEmailResponseDto(errorCode.getHttpStatusCode(), errorCode.getErrorCode(), errorCode.getDescription(),null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+    }
 
 }
