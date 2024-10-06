@@ -2,7 +2,7 @@ package com.example.altteulmoa.controller;
 
 import com.example.altteulmoa.dto.request.help.FindEmailRequestDto;
 import com.example.altteulmoa.dto.response.help.FindEmailResponseDto;
-import com.example.altteulmoa.service.HelpService;
+import com.example.altteulmoa.service.help.HelpService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
