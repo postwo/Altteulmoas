@@ -6,7 +6,6 @@ import com.example.altteulmoa.dto.request.auth.SignUpRequestDto;
 public class UserConverter {
 
     //회원가입
-    // 회원가입
     public static UserEntity toEntity(SignUpRequestDto dto) {
         return UserEntity.builder()
                 .email(dto.getEmail())
