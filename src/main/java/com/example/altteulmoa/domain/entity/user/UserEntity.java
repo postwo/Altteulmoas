@@ -1,10 +1,14 @@
 package com.example.altteulmoa.domain.entity.user;
 
 import com.example.altteulmoa.domain.entity.BaseEntity;
+import com.example.altteulmoa.domain.entity.article.GroupPurchaseArticleEntity;
 import com.example.altteulmoa.domain.entity.user.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -41,25 +45,8 @@ public class UserEntity extends BaseEntity {
     private UserStatus userStatus;
 
 
-
-    //회원가입
-    public UserEntity(String email, String password, String nickname, UserStatus userStatus,String telNumber) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.userStatus = userStatus;
-        this.telNumber =telNumber;
-    }
-
-
-    //로그인
-    public UserEntity(String email,String password){
-        this.email = email;
-        this.password = password;
-    }
-
-
-
-    //주소 등록
+    // 사용자가 등록한 공동구매 글 리스트
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GroupPurchaseArticleEntity> purchases;
 
 }
