@@ -1,4 +1,4 @@
-package com.example.altteulmoa.service;
+package com.example.altteulmoa.service.help;
 
 import com.example.altteulmoa.domain.entity.user.UserEntity;
 import com.example.altteulmoa.dto.request.help.FindEmailRequestDto;

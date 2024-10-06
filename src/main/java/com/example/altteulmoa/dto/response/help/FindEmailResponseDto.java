@@ -25,12 +25,7 @@ public class FindEmailResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 
-    //유저가 없다
-    public static ResponseEntity<FindEmailResponseDto> existedUser(){
-       ErrorCode errorCode = ErrorCode.NOT_EXISTED_USER;
-        FindEmailResponseDto result = new FindEmailResponseDto(errorCode.getHttpStatusCode(), errorCode.getErrorCode(), errorCode.getDescription(),null);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
-    }
+
 
 
 }
