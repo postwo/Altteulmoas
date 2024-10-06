@@ -7,7 +7,7 @@ import com.example.altteulmoa.dto.request.auth.SignUpRequestDto;
 import com.example.altteulmoa.dto.response.address.AddressResponseDto;
 import com.example.altteulmoa.dto.response.auth.SignInResponseDto;
 import com.example.altteulmoa.dto.response.auth.SignUpResponseDto;
-import com.example.altteulmoa.service.UserService;
+import com.example.altteulmoa.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +41,9 @@ public class UserController {
     }
 
     //사용자 주소 저장
+    //postman으로 통과 되는데 swagger에서는 에러가 뜬다 나중에 해결하기
     @PostMapping("/address")
     public ResponseEntity<? super AddressResponseDto> address(@AuthenticationPrincipal String email, @RequestBody @Valid AddressRequestDto requestBody) {
-       log.info(email);
         ResponseEntity<? super AddressResponseDto> response = userService.address(email,requestBody);
         return response;
     }
