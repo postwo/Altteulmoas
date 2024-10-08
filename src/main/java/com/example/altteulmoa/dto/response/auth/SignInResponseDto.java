@@ -16,32 +16,37 @@ public class SignInResponseDto extends ResponseDto {
     @JsonProperty("expirationTime")
     private int expirationTime; // 만료시간
 
-    public SignInResponseDto( Integer httpStatusCode, Integer errorCode, String description, String token) {
+    @JsonProperty("refreshToken")
+    private String refreshToken;
+
+    public SignInResponseDto( Integer httpStatusCode, Integer errorCode, String description, String token ,String refreshToken) {
         super(httpStatusCode, errorCode, description);
         this.token = token;
         this.expirationTime = 3600; // 만료시간 1시간으로 설정
+        this.refreshToken =refreshToken;
     }
 
+
     // 성공
-    public static ResponseEntity<SignInResponseDto> success(String token) {
+    public static ResponseEntity<SignInResponseDto> success(String token,String refreshToken) {
         ErrorCode errorCode = ErrorCode.SUCCESS;
         SignInResponseDto result = new SignInResponseDto(
                 errorCode.getHttpStatusCode(),
                 errorCode.getErrorCode(),
                 errorCode.getDescription(),
-                token // token 값이 제대로 설정되도록 확인
+                token, // token 값이 제대로 설정되도록 확인
+                refreshToken
         );
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 로그인 실패
     public static ResponseEntity<ResponseDto> signFail() {
-        ErrorCode errorCode = ErrorCode.SIGN_IN_FAIL;
-        ResponseDto result = new ResponseDto(
-                errorCode.getHttpStatusCode(),
-                errorCode.getErrorCode(),
-                errorCode.getDescription()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+       ErrorCode errorCode = ErrorCode.SIGN_IN_FAIL;
+       ResponseDto result = new ResponseDto(errorCode.getHttpStatusCode(), errorCode.getErrorCode(), errorCode.getDescription());
+       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
+
+
+
 }
