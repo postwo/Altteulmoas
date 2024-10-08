@@ -8,7 +8,6 @@ server:
       force: true
 
 spring:
-
   show-sql: true
 
   jpa:
@@ -20,6 +19,8 @@ spring:
       ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+    open-in-view: false  # 뷰 렌더링 중에 데이터베이스 연결이 필요하지 않은 경우에는 비효율적일 수 있습
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -38,3 +39,10 @@ logging:
   level:
     org.hibernate.SQL: DEBUG               # SQL 쿼리 로그를 출력
     org.hibernate.type.descriptor.sql.BasicTypeDescriptor: TRACE # 바인딩된 파라미터의 로그를 출력
+
+
+kakao:
+  map:
+    api:
+      url: https://dapi.kakao.com/v2/local/search/address.json
+      key: ${kakoapikey}
