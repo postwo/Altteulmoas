@@ -1,5 +1,7 @@
 package com.example.altteulmoa.config;
 
+import com.example.altteulmoa.filter.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,12 +11,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,15 +39,21 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/","/user/**","/help/**","/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**").permitAll()
+                        .requestMatchers("/safe/**","/address/**").hasRole("USER")
                         .requestMatchers("/admin").hasAnyRole("ADMIN","MASTER")
                         .requestMatchers("/master").hasRole("MASTER")
                         .anyRequest().authenticated()
                 )
 
+
                 //authorizeHttpRequests 에서 발생한 exception 이발생 할경우 처리
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(new AuthorizeHttpRequestsException()) //인스턴스를 넘겨준다
-                );
+                )
+
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+
 
         return http.build();
     }

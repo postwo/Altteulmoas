@@ -47,7 +47,7 @@ public class UserService {
           if (Duplicate_nickname) return SignUpResponseDto.duplicateNickname();
 
           dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-          dto.setUserStatus(UserStatus.USER);
+          dto.setUserStatus(UserStatus.ROLE_USER);
 
           UserEntity userEntity = UserConverter.toEntity(dto);
 
@@ -67,6 +67,7 @@ public class UserService {
     public ResponseEntity<? super SignInResponseDto> login(SignInRequestDto dto){
 
         String token = null;
+        String refreshToken = null;
 
         try{
             String email = dto.getEmail();
@@ -78,18 +79,21 @@ public class UserService {
             boolean isMatched = passwordEncoder.matches(password,encodePassword);
             if (!isMatched) return SignInResponseDto.signFail();
 
-
+            // 사용자 권한(Role) 추출
+            String role = userEntity.get().getUserStatus().name();
 
             //기존 토큰 생성
-            token = jwtProvider.create(email);
+            token = jwtProvider.create(email,role);
 
+            // Refresh Token 생성
+            refreshToken = jwtProvider.createRefreshToken(email,role);
 
         }catch (Exception e){
             e.printStackTrace();
             return SignInResponseDto.databaseError();
         }
 
-        return SignInResponseDto.success(token);
+        return SignInResponseDto.success(token,refreshToken);
     }
 
     //주소 저장
