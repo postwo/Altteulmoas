@@ -1,7 +1,7 @@
 package com.example.altteulmoa.dto.response.address;
 
 import com.example.altteulmoa.common.error.ErrorCode;
-import com.example.altteulmoa.dto.response.PlaceResponseDto;
+import com.example.altteulmoa.dto.PlaceResponseDto;
 import com.example.altteulmoa.dto.response.ResponseDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;

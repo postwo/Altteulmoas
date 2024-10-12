@@ -1,7 +1,7 @@
 package com.example.altteulmoa.service.safeplace;
 
 import com.example.altteulmoa.domain.entity.user.UserEntity;
-import com.example.altteulmoa.dto.response.PlaceResponseDto;
+import com.example.altteulmoa.dto.PlaceResponseDto;
 import com.example.altteulmoa.dto.response.address.SafePlaceFindResponseDto;
 import com.example.altteulmoa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

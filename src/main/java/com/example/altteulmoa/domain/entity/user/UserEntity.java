@@ -1,7 +1,7 @@
 package com.example.altteulmoa.domain.entity.user;
 
 import com.example.altteulmoa.domain.entity.BaseEntity;
-import com.example.altteulmoa.domain.entity.article.GroupPurchaseArticleEntity;
+import com.example.altteulmoa.domain.entity.grouparticle.GroupPurchaseArticleEntity;
 import com.example.altteulmoa.domain.entity.user.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
