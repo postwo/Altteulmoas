@@ -33,6 +33,14 @@ spring:
   jwt:
     secret-key: ${key}
 
+  servlet:
+    multipart:
+      max-file-size: 20MB         # 파일 업로드 최대 크기
+      max-request-size: 20MB
+
+
+itemImgLocation: C:/file/upload/    # 상품 이미지 저장 위치
+uploadPath: file:///C:/upload/      # 상품 이미지 업로드 위치
 
 
 logging:
@@ -46,3 +54,4 @@ kakao:
     api:
       url: https://dapi.kakao.com/v2/local/search/address.json
       key: ${kakoapikey}
+
