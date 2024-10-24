@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>공동구매 글 작성 및 지도 검색</title>
+    <style>
+        #map {width:40%;height:300px;float:left;}
+        #form_wrap {width:50%;float:right;}
+        #menu_wrap {margin-top:20px;border-radius:5px;width:300px;z-index:1;background:#fff;box-shadow:0px 1px 2px rgba(0,0,0,0.1);padding:10px;}
+        .item {cursor:pointer;padding:5px;margin-bottom:2px;border-bottom:1px solid #ddd;}
+        .item:hover {background-color: #f5f5f5;}
+        form label {display:block;margin:5px 0;}
+        #photo_preview {display:flex;flex-wrap:wrap;margin-top:10px;}
+        #photo_preview img {width:100px;height:100px;object-fit:cover;margin-right:10px;margin-bottom:10px;}
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="form_wrap">
+    <form action="/group-purchase" method="post" enctype="multipart/form-data">
+        <label for="title">제목:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="content">내용:</label>
+        <textarea id="content" name="content" required></textarea>
+
+        <label for="participantCount">참여 인원수:</label>
+        <input type="number" id="participantCount" name="participantCount" min="1" max="4" required>
+
+        <label for="price">가격:</label>
+        <input type="number" id="price" name="price" step="0.01" required>
+
+        <label for="photoInput">사진 (최대 4장):</label>
+        <div id="photo_input_container">
+            <input type="file" class="custom-file-input" id="photoInput" name="itemImgFile" accept="image/*" onchange="previewPhotos()" required>
+        </div>
+
+        <div id="photo_preview"></div>
+
+        <div id="menu_wrap">
+            <input type="text" id="keyword" placeholder="검색어를 입력하세요" style="width:80%;" onkeypress="handleKeyPress(event)">
+            <button type="button" onclick="searchPlaces()">검색</button>
+            <div id="placesList"></div>
+        </div>
+
+        <p><em>지도를 클릭해 마커를 옮기세요!</em></p>
+        <div id="clickLatlng"></div>
+
+        <button type="submit">공동구매 글 작성</button>
+    </form>
+</div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4e668a5d37e3798caec01167df53adfd&libraries=services"></script>
+<script>
+    var mapContainer = document.getElementById('map'),
+        mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+    var marker = new kakao.maps.Marker({position: map.getCenter()}); // 초기 마커 설정
+    marker.setMap(map);
+
+    // 장소 검색 객체를 생성합니다
+    var ps = new kakao.maps.services.Places();
+
+    // 지도에 클릭 이벤트를 등록합니다
+    kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+        var latlng = mouseEvent.latLng;
+        marker.setPosition(latlng); // 클릭한 위치로 마커 이동
+
+        var geocoder = new kakao.maps.services.Geocoder(); // 주소 검색을 위한 객체
+        geocoder.coord2Address(latlng.getLng(), latlng.getLat(), function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var address = result[0].address.address_name;
+                var message = '클릭한 위치의 위도: ' + latlng.getLat() + ', 경도: ' + latlng.getLng() + '<br>주소: ' + address;
+                document.getElementById('clickLatlng').innerHTML = message;
+            }
+        });
+    });
+
+    // 엔터 키를 감지하는 함수
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            searchPlaces(); // 엔터 키를 누르면 검색 수행
+        }
+    }
+
+    // 키워드 검색을 수행하는 함수
+    function searchPlaces() {
+        var keyword = document.getElementById('keyword').value;
+        if (!keyword.trim()) {
+            alert('검색어를 입력해주세요');
+            return;
+        }
+
+        ps.keywordSearch(keyword, placesSearchCB);
+    }
+
+    // 검색 결과 목록을 생성하고, 선택 시 해당 위치로 마커 이동
+    function placesSearchCB(data, status, pagination) {
+        if (status === kakao.maps.services.Status.OK) {
+            var placesList = document.getElementById('placesList');
+            placesList.innerHTML = '';
+
+            for (var i = 0; i < data.length && i < 10; i++) {
+                var item = document.createElement('div');
+                item.className = 'item';
+                item.innerHTML = data[i].place_name + ' (' + data[i].address_name + ')';
+                item.onclick = (function(lat, lng, address) {
+                    return function() {
+                        var moveLatLon = new kakao.maps.LatLng(lat, lng);
+                        map.setCenter(moveLatLon); // 검색 결과 위치로 지도 이동
+                        marker.setPosition(moveLatLon); // 마커 이동
+
+                        // 클릭한 장소의 주소 및 위도/경도 표시
+                        var message = '클릭한 위치의 위도: ' + lat + ', 경도: ' + lng + '<br>주소: ' + address;
+                        document.getElementById('clickLatlng').innerHTML = message;
+                    };
+                })(data[i].y, data[i].x, data[i].address_name); // 위도, 경도, 주소를 전달
+                placesList.appendChild(item);
+            }
+        } else {
+            alert('검색 결과가 없습니다.');
+        }
+    }
+
+    // 업로드한 사진 미리보기 기능
+    function previewPhotos() {
+        var preview = document.getElementById('photo_preview');
+        var files = document.querySelector('input[name="itemImgFile"]').files;
+
+        // 최대 4장 체크
+        if (files.length > 4) {
+            alert("사진은 최대 4장까지 업로드할 수 있습니다.");
+            document.querySelector('input[name="itemImgFile"]').value = ''; // 선택한 파일 초기화
+            preview.innerHTML = ''; // 미리보기 초기화
+            return;
+        }
+
+        // 기존 이미지를 유지한 채로 추가
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = document.createElement('img');
+                img.src = e.target.result;
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(file); // 파일을 읽고 미리보기 표시
+        }
+
+        // 새로운 파일 입력 필드를 추가
+        addFileInput();
+    }
+
+    // 새로운 파일 입력 필드를 추가하는 함수
+    function addFileInput() {
+        var inputContainer = document.getElementById('photo_input_container');
+        var inputs = inputContainer.getElementsByTagName('input');
+
+        // 최대 4개의 파일 입력 필드 유지
+        if (inputs.length < 4) {
+            var newInput = document.createElement('input');
+            newInput.type = 'file';
+            newInput.className = 'custom-file-input';
+            newInput.name = 'itemImgFile';
+            newInput.accept = 'image/*';
+            newInput.onchange = previewPhotos; // 변경 시 미리보기
+            inputContainer.appendChild(newInput);
+        }
+    }
+
+</script>
+
+</body>
+</html>
