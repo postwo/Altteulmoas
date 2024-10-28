@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @EntityListeners(AuditingEntityListener.class)
-@MappedSuperclass
+@MappedSuperclass // 테이블로 매핑하지 않고, 자식 Entity에게 매핑 정보를 상속하기 위한 어노테이션
 public class AuditingFields {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
