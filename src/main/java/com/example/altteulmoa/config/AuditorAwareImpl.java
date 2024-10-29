@@ -12,7 +12,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
-        // 현재 사용자를 가져오는 메소드(인증 정보 확인)
+        // 현재 사용자를 가져오는 메소드(인증 정보 확인) == 로그인한 사용자가 생성도 하고 수정도 할거기 때문에 이렇게 만들어준다
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String userId = "";
