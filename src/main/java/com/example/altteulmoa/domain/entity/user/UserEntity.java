@@ -1,11 +1,10 @@
 package com.example.altteulmoa.domain.entity.user;
 
-import com.example.altteulmoa.domain.entity.BaseEntity;
+import com.example.altteulmoa.domain.AuditingFields;
 import com.example.altteulmoa.domain.entity.grouparticle.GroupPurchaseArticleEntity;
 import com.example.altteulmoa.domain.entity.user.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -16,11 +15,15 @@ import java.util.List;
 @Table(indexes = {
         @Index(columnList = "email")
 })
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class UserEntity extends BaseEntity {
+@EqualsAndHashCode(callSuper = false)
+public class UserEntity extends AuditingFields {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(length = 100,nullable = false)
     private String email;
