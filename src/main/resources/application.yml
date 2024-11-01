@@ -39,7 +39,7 @@ spring:
       max-request-size: 20MB
 
 
-itemImgLocation: C:/file/upload/    # 상품 이미지 저장 위치
+ImgLocation: C:/file/upload/    # 상품 이미지 저장 위치
 uploadPath: file:///C:/upload/      # 상품 이미지 업로드 위치
 
 
