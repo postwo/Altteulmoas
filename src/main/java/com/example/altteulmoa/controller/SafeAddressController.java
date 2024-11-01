@@ -18,6 +18,7 @@ public class SafeAddressController {
 
     private final SafePlaceFinderService safePlaceFinderService;
 
+    // 사용자 주소지 기반으로 장소를 추천 사용하고 싶지 않으면 선택을 안하고
     @GetMapping("/api/safe-places")
     public ResponseEntity<? super SafePlaceFindResponseDto> findSafePlaces(@AuthenticationPrincipal String email) {
         ResponseEntity<? super SafePlaceFindResponseDto> response = safePlaceFinderService.findSafeLocations(email);
